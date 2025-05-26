@@ -3,12 +3,64 @@
     "name": "Kaos Sablon Satuan",
     "images": ["img/img_1.jpg", "img/img_1.jpg"],
     "description": "Kaos Sablon Custom New Design Print",
-    "whatsappMessage": "Halo, saya tertarik dengan Kaos Sablon Satuan."
+    "whatsappMessage": "Halo, saya tertarik dengan Kaos Sablon Satuan.",
+    "category": "apparel-custom",
+    "price": 85000
   },
   {
     "name": "Payung Promosi Lipat",
     "images": ["img/img_1.jpg", "img/img_1.jpg"],
     "description": "Payung Promosi Custom New Design Print",
-    "whatsappMessage": "Halo, saya tertarik dengan Payung Promosi Lipat."
+    "whatsappMessage": "Halo, saya tertarik dengan Payung Promosi Lipat.",
+    "category": "souvenir-merchandise",
+    "price": 75000
+  },
+  {
+    "name": "Mug Custom Desain",
+    "images": ["img/img_1.jpg", "img/img_1.jpg"],
+    "description": "Mug keramik berkualitas dengan cetak desain Anda.",
+    "whatsappMessage": "Halo, saya tertarik dengan Mug Custom Desain.",
+    "category": "drinkware-custom",
+    "price": 45000
+  },
+  {
+    "name": "Kaos Polo Bordir",
+    "images": ["img/img_1.jpg", "img/img_1.jpg"],
+    "description": "Kaos polo elegan dengan bordir logo perusahaan atau komunitas.",
+    "whatsappMessage": "Halo, saya tertarik dengan Kaos Polo Bordir.",
+    "category": "apparel-custom",
+    "price": 120000
+  },
+  {
+    "name": "Gantungan Kunci Akrilik",
+    "images": ["img/img_1.jpg", "img/img_1.jpg"],
+    "description": "Gantungan kunci unik dengan desain akrilik custom.",
+    "whatsappMessage": "Halo, saya tertarik dengan Gantungan Kunci Akrilik.",
+    "category": "souvenir-merchandise",
+    "price": 20000
+  },
+  {
+    "name": "Botol Minum Stainless Steel",
+    "images": ["img/img_1.jpg", "img/img_1.jpg"],
+    "description": "Botol minum stainless steel dengan desain custom.",
+    "whatsappMessage": "Halo, saya tertarik dengan Botol Minum Stainless Steel.",
+    "category": "drinkware-custom",
+    "price": 90000
+  },
+  {
+    "name": "Topi Baseball Custom",
+    "images": ["img/img_1.jpg", "img/img_1.jpg"],
+    "description": "Topi baseball dengan bordir atau sablon desain pilihan Anda.",
+    "whatsappMessage": "Halo, saya tertarik dengan Topi Baseball Custom.",
+    "category": "apparel-custom",
+    "price": 70000
+  },
+  {
+    "name": "Notebook Custom Cover",
+    "images": ["img/img_1.jpg", "img/img_1.jpg"],
+    "description": "Notebook dengan cover custom sesuai desain Anda.",
+    "whatsappMessage": "Halo, saya tertarik dengan Notebook Custom Cover.",
+    "category": "stationery-custom",
+    "price": 30000
   }
 ]

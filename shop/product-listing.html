@@ -595,27 +595,43 @@
                 <h5 class="filter-heading text-center text-lg-left">
                   Kategori Produk
                 </h5>
-                <ul>
+                <ul id="category-list">
                   <li>
-                    <a href="#filter-apparel">Apparel Custom</a><span>(4)</span>
+                    <a href="#filter-apparel" data-category="apparel-custom"
+                      >Apparel Custom</a
+                    ><span data-count-category="apparel-custom">(0)</span>
                   </li>
                   <li>
-                    <a href="#filter-souvenir">Souvenir & Merchandise</a
-                    ><span>(5)</span>
+                    <a
+                      href="#filter-souvenir"
+                      data-category="souvenir-merchandise"
+                      >Souvenir & Merchandise</a
+                    ><span data-count-category="souvenir-merchandise">(0)</span>
                   </li>
                   <li>
-                    <a href="#filter-promosi">Media Promosi</a><span>(3)</span>
+                    <a href="#filter-promosi" data-category="media-promosi"
+                      >Media Promosi</a
+                    ><span data-count-category="media-promosi">(0)</span>
                   </li>
                   <li>
-                    <a href="#filter-drinkware">Drinkware Custom</a
-                    ><span>(2)</span>
+                    <a href="#filter-drinkware" data-category="drinkware-custom"
+                      >Drinkware Custom</a
+                    ><span data-count-category="drinkware-custom">(0)</span>
                   </li>
                   <li>
-                    <a href="#filter-aksesoris">Aksesoris Kantor</a
-                    ><span>(2)</span>
+                    <a href="#filter-aksesoris" data-category="aksesoris-kantor"
+                      >Aksesoris Kantor</a
+                    ><span data-count-category="aksesoris-kantor">(0)</span>
                   </li>
                   <li>
-                    <a href="#filter-lainnya">Cetak Lainnya</a><span>(3)</span>
+                    <a href="#filter-lainnya" data-category="cetak-lainnya"
+                      >Cetak Lainnya</a
+                    ><span data-count-category="cetak-lainnya">(0)</span>
+                  </li>
+                  <li>
+                    <a href="#filter-all" data-category="all" class="active"
+                      >Semua Produk</a
+                    ><span data-count-category="all">(0)</span>
                   </li>
                 </ul>
               </div>
@@ -627,7 +643,10 @@
                 </p>
               </div>
 
-              <button class="btn pink-gradient-btn-into-black mt-1">
+              <button
+                id="apply-price-filter-button"
+                class="btn pink-gradient-btn-into-black mt-1"
+              >
                 Filter Produk
               </button>
               <div class="product-add mt-4">
@@ -638,7 +657,7 @@
                       title="Hubungi Kami untuk Penawaran Spesial"
                     >
                       <img
-                        src="img/promo-banner-sidebar.jpg"
+                        src="img/img_1.jpg"
                         alt="Promo Spesial New Design Print"
                       />
                     </a>
@@ -957,6 +976,554 @@
     <!-- Custom Script -->
     <script src="../shop/js/script.js"></script>
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const productListContainer =
+          document.querySelector(".product-list.row");
+        const categoryLinksContainer = document.getElementById("category-list");
+        const productsJsonPath = "data/products.json";
+        const yourWhatsAppNumber = "+6285156615123";
+
+        // Elemen untuk filter harga
+        const priceSliderElement = document.getElementById("slider-range");
+        const minPriceDisplay = document.getElementById("min-p");
+        const maxPriceDisplay = document.getElementById("max-p");
+        const applyFiltersButton = document.getElementById(
+          "apply-price-filter-button"
+        ); // Tombol filter
+
+        let allProductsData = [];
+        let priceSliderInstance = null; // Untuk menyimpan instance noUiSlider
+
+        // Fungsi untuk merender daftar produk ke DOM (tetap sama seperti sebelumnya)
+        // Fungsi untuk merender daftar produk ke DOM
+        function renderProducts(productsToDisplay) {
+          productListContainer.innerHTML = ""; // Kosongkan container
+          let wowDelay = 0.2;
+
+          if (productsToDisplay.length === 0) {
+            productListContainer.innerHTML =
+              '<p class="col-12 text-center">Tidak ada produk yang cocok dengan filter Anda.</p>';
+            if (typeof WOW !== "undefined") {
+              new WOW().init();
+            }
+            return;
+          }
+
+          productsToDisplay.forEach((product) => {
+            let imageCarouselItemsHTML = "";
+            if (product.images && product.images.length > 0) {
+              product.images.forEach((imageSrc) => {
+                imageCarouselItemsHTML += `
+              <div class="item p-item-img">
+                <img src="${imageSrc}" alt="${
+                  product.name
+                } - New Design Print" />
+                <div class="text-center d-flex justify-content-center align-items-center">
+                  <a class="listing-cart-icon"
+                     href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                  product.whatsappMessage
+                )}"
+                     target="_blank"
+                     title="Pesan via WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                </div>
+              </div>
+            `;
+              });
+            } else {
+              imageCarouselItemsHTML = `
+            <div class="item p-item-img">
+              <img src="img/img_placeholder.jpg" alt="${
+                product.name
+              } - Tidak ada gambar" />
+              <div class="text-center d-flex justify-content-center align-items-center">
+                <a class="listing-cart-icon"
+                   href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                product.whatsappMessage
+              )}"
+                   target="_blank"
+                   title="Pesan via WhatsApp">
+                  <i class="fab fa-whatsapp"></i>
+                </a>
+              </div>
+            </div>
+          `;
+            }
+
+            const productItemHTML = `
+          <div class="col-12 col-md-6 col-lg-4 manage-color-hover wow slideInUp" data-wow-delay="${wowDelay.toFixed(
+            1
+          )}s">
+            <div class="product-item owl-theme product-listing-carousel owl-carousel">
+              ${imageCarouselItemsHTML}
+            </div>
+            <div class="p-item-detail">
+              <h4 class="text-center p-item-name">
+                <a href="javascript:void(0);">${product.name}</a>
+              </h4>
+              <p class="text-center p-item-price">
+                ${product.description || "Info & Pesan via WA"}
+              </p>
+              ${
+                product.price
+                  ? `<p class="text-center p-item-actual-price">Rp ${product.price.toLocaleString(
+                      "id-ID"
+                    )}</p>`
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+            productListContainer.insertAdjacentHTML(
+              "beforeend",
+              productItemHTML
+            );
+            wowDelay += 0.1;
+            if (wowDelay > 0.9) wowDelay = 0.2;
+          });
+
+          if (typeof $ !== "undefined" && $.fn.owlCarousel) {
+            $(productListContainer)
+              .find(".product-listing-carousel")
+              .each(function () {
+                // Hancurkan instance lama jika ada untuk menghindari konflik
+                if ($(this).hasClass("owl-carousel-initialized")) {
+                  // $(this).trigger('destroy.owl.carousel').removeClass('owl-carousel-initialized owl-loaded owl-hidden');
+                }
+                // Inisialisasi hanya jika belum
+                if (!$(this).hasClass("owl-carousel-initialized")) {
+                  $(this)
+                    .owlCarousel({
+                      items: 1,
+                      loop: $(this).find(".item").length > 1,
+                      margin: 0,
+                      nav: false,
+                      dots: $(this).find(".item").length > 1,
+                      autoplay: false,
+                    })
+                    .addClass("owl-carousel-initialized");
+                }
+              });
+          }
+          if (typeof WOW !== "undefined") {
+            new WOW().init();
+          }
+        }
+
+        // Fungsi untuk update jumlah produk di kategori (tetap sama)
+        function updateCategoryCounts() {
+          const categoryCounts = {};
+          allProductsData.forEach((product) => {
+            if (product.category) {
+              categoryCounts[product.category] =
+                (categoryCounts[product.category] || 0) + 1;
+            }
+          });
+          const allCategorySpan = categoryLinksContainer.querySelector(
+            'span[data-count-category="all"]'
+          );
+          if (allCategorySpan) {
+            allCategorySpan.textContent = `(${allProductsData.length})`;
+          }
+          for (const categoryKey in categoryCounts) {
+            const spanElement = categoryLinksContainer.querySelector(
+              `span[data-count-category="${categoryKey}"]`
+            );
+            if (spanElement) {
+              spanElement.textContent = `(${categoryCounts[categoryKey]})`;
+            }
+          }
+        }
+
+        // --- BARU: Inisialisasi noUiSlider ---
+        // --- BARU: Inisialisasi noUiSlider ---
+        function initializePriceSlider(minPrice, maxPrice) {
+          if (!priceSliderElement || typeof noUiSlider === "undefined") {
+            console.warn(
+              "Elemen price slider atau library noUiSlider tidak ditemukan."
+            );
+            return;
+          }
+
+          // Cek apakah slider sudah diinisialisasi pada elemen DOM ini.
+          // noUiSlider biasanya menambahkan properti '.noUiSlider' ke elemen DOM saat inisialisasi.
+          if (priceSliderElement.noUiSlider) {
+            // Jika sudah ada instance, hancurkan terlebih dahulu.
+            try {
+              priceSliderElement.noUiSlider.destroy();
+              console.log("Instance noUiSlider yang ada telah dihancurkan.");
+            } catch (e) {
+              console.warn(
+                "Tidak dapat menghancurkan instance noUiSlider yang ada:",
+                e
+              );
+              // Jika gagal dihancurkan, mungkin lebih baik tidak melanjutkan
+              // untuk menghindari error lebih lanjut atau perilaku tak terduga.
+              // Namun, untuk kasus ini, kita bisa coba tetap membuat yang baru.
+            }
+          }
+
+          // Tentukan nilai awal untuk slider, pastikan min tidak lebih besar dari max.
+          const sliderStartMin = minPrice >= 0 ? minPrice : 0; // minPrice tidak boleh negatif
+          let sliderStartMax = maxPrice > 0 ? maxPrice : 500000; // Default max jika tidak ada harga produk valid
+
+          // Pastikan maxPrice selalu lebih besar dari minPrice untuk slider
+          if (sliderStartMax <= sliderStartMin) {
+            sliderStartMax = sliderStartMin + 1000; // Beri sedikit jarak jika sama atau lebih kecil
+          }
+
+          try {
+            priceSliderInstance = noUiSlider.create(priceSliderElement, {
+              start: [sliderStartMin, sliderStartMax],
+              connect: true,
+              step: 1000, // Sesuaikan step jika perlu
+              range: {
+                min: sliderStartMin,
+                max: sliderStartMax,
+              },
+              format: {
+                to: function (value) {
+                  return Math.round(value);
+                },
+                from: function (value) {
+                  return Math.round(value);
+                },
+              },
+            });
+            console.log("Instance noUiSlider berhasil dibuat/dibuat ulang.");
+
+            priceSliderInstance.on("update", function (values, handle) {
+              if (minPriceDisplay && maxPriceDisplay) {
+                minPriceDisplay.textContent = `Rp ${parseInt(
+                  values[0]
+                ).toLocaleString("id-ID")}`;
+                maxPriceDisplay.textContent = `Rp ${parseInt(
+                  values[1]
+                ).toLocaleString("id-ID")}`;
+              }
+            });
+          } catch (e) {
+            console.error("Error saat membuat instance noUiSlider:", e);
+            // Error ini bisa terjadi jika 'destroy' tidak sepenuhnya membersihkan
+            // atau ada kondisi lain yang menghalangi pembuatan.
+          }
+        }
+
+        // --- BARU / MODIFIKASI: Fungsi untuk menerapkan SEMUA filter ---
+        function applyAllFilters() {
+          let filteredProducts = [...allProductsData]; // Salin array agar tidak mengubah data asli
+
+          // 1. Filter berdasarkan kategori aktif
+          const activeCategoryLink = categoryLinksContainer.querySelector(
+            "a[data-category].active"
+          );
+          const selectedCategory = activeCategoryLink
+            ? activeCategoryLink.dataset.category
+            : "all";
+
+          if (selectedCategory !== "all") {
+            filteredProducts = filteredProducts.filter(
+              (product) => product.category === selectedCategory
+            );
+          }
+
+          // 2. Filter berdasarkan rentang harga dari slider
+          if (priceSliderInstance) {
+            const priceRange = priceSliderInstance.get(); // [min, max]
+            const minSelectedPrice = parseInt(priceRange[0]);
+            const maxSelectedPrice = parseInt(priceRange[1]);
+
+            filteredProducts = filteredProducts.filter((product) => {
+              // Pastikan produk memiliki harga dan merupakan angka
+              if (typeof product.price !== "number" || isNaN(product.price)) {
+                return false; // Abaikan produk tanpa harga atau harga tidak valid untuk filter harga
+              }
+              return (
+                product.price >= minSelectedPrice &&
+                product.price <= maxSelectedPrice
+              );
+            });
+          }
+          renderProducts(filteredProducts);
+        }
+
+        // Fungsi untuk menangani klik pada link kategori (MODIFIKASI untuk memanggil applyAllFilters)
+        function handleCategoryClick(event) {
+          event.preventDefault();
+          const clickedLink = event.target.closest("a[data-category]");
+          if (!clickedLink) return;
+
+          categoryLinksContainer
+            .querySelectorAll("a[data-category]")
+            .forEach((link) => {
+              link.classList.remove("active");
+            });
+          clickedLink.classList.add("active");
+          applyAllFilters(); // Panggil fungsi filter gabungan
+        }
+
+        // Fetch data produk
+        fetch(productsJsonPath)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((products) => {
+            allProductsData = products;
+
+            // --- BARU: Tentukan min/max harga dari semua produk ---
+            let minProductPrice = 0;
+            let maxProductPrice = 0;
+            const validPrices = allProductsData
+              .filter((p) => typeof p.price === "number")
+              .map((p) => p.price);
+
+            if (validPrices.length > 0) {
+              minProductPrice = Math.min(...validPrices);
+              maxProductPrice = Math.max(...validPrices);
+            } else {
+              // Default jika tidak ada harga sama sekali
+              minProductPrice = 0;
+              maxProductPrice = 500000; // Atur default max range yang masuk akal
+            }
+            // Pastikan maxPrice lebih besar dari minPrice untuk slider
+            if (maxProductPrice <= minProductPrice && validPrices.length > 0)
+              maxProductPrice = minProductPrice + 1000;
+
+            initializePriceSlider(minProductPrice, maxProductPrice); // Inisialisasi slider
+            renderProducts(allProductsData);
+            updateCategoryCounts();
+
+            if (categoryLinksContainer) {
+              categoryLinksContainer.addEventListener(
+                "click",
+                handleCategoryClick
+              );
+            }
+
+            // --- BARU: Event listener untuk tombol "Filter Produk" ---
+            if (applyFiltersButton) {
+              applyFiltersButton.addEventListener("click", function () {
+                applyAllFilters();
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Gagal memuat atau memproses products.json:", error);
+            productListContainer.innerHTML =
+              '<p class="col-12 text-center text-danger">Gagal memuat produk. Silakan coba lagi nanti.</p>';
+          });
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        const productListContainer =
+          document.querySelector(".product-list.row");
+        const categoryLinksContainer = document.getElementById("category-list"); // Container untuk link kategori
+        const productsJsonPath = "data/products.json";
+        const yourWhatsAppNumber = "+6285156615123";
+
+        let allProductsData = []; // Untuk menyimpan semua data produk dari JSON
+
+        // Fungsi untuk merender daftar produk ke DOM
+        function renderProducts(productsToDisplay) {
+          productListContainer.innerHTML = ""; // Kosongkan container
+          let wowDelay = 0.2;
+
+          if (productsToDisplay.length === 0) {
+            productListContainer.innerHTML =
+              '<p class="col-12 text-center">Tidak ada produk dalam kategori ini.</p>';
+            // Re-initialize WOW.js jika ada perubahan besar pada DOM, meski kosong
+            if (typeof WOW !== "undefined") {
+              new WOW().init();
+            }
+            return;
+          }
+
+          productsToDisplay.forEach((product) => {
+            let imageCarouselItemsHTML = "";
+            if (product.images && product.images.length > 0) {
+              product.images.forEach((imageSrc) => {
+                imageCarouselItemsHTML += `
+                  <div class="item p-item-img">
+                    <img src="${imageSrc}" alt="${
+                  product.name
+                } - New Design Print" />
+                    <div class="text-center d-flex justify-content-center align-items-center">
+                      <a class="listing-cart-icon"
+                         href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                  product.whatsappMessage
+                )}"
+                         target="_blank"
+                         title="Pesan via WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                      </a>
+                    </div>
+                  </div>
+                `;
+              });
+            } else {
+              imageCarouselItemsHTML = `
+                <div class="item p-item-img">
+                  <img src="img/img_placeholder.jpg" alt="${
+                    product.name
+                  } - Tidak ada gambar" />
+                  <div class="text-center d-flex justify-content-center align-items-center">
+                    <a class="listing-cart-icon"
+                       href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                product.whatsappMessage
+              )}"
+                       target="_blank"
+                       title="Pesan via WhatsApp">
+                      <i class="fab fa-whatsapp"></i>
+                    </a>
+                  </div>
+                </div>
+              `;
+            }
+
+            const productItemHTML = `
+              <div class="col-12 col-md-6 col-lg-4 manage-color-hover wow slideInUp" data-wow-delay="${wowDelay.toFixed(
+                1
+              )}s">
+                <div class="product-item owl-theme product-listing-carousel owl-carousel">
+                  ${imageCarouselItemsHTML}
+                </div>
+                <div class="p-item-detail">
+                  <h4 class="text-center p-item-name">
+                    <a href="javascript:void(0);">${product.name}</a>
+                  </h4>
+                  <p class="text-center p-item-price">
+                    ${product.description || "Info & Pesan via WA"}
+                  </p>
+                </div>
+              </div>
+            `;
+            productListContainer.insertAdjacentHTML(
+              "beforeend",
+              productItemHTML
+            );
+            wowDelay += 0.1;
+            if (wowDelay > 0.9) wowDelay = 0.2;
+          });
+
+          // Re-initialize Owl Carousels untuk elemen yang baru ditambahkan
+          if (typeof $ !== "undefined" && $.fn.owlCarousel) {
+            $(productListContainer)
+              .find(".product-listing-carousel")
+              .each(function () {
+                // Hancurkan instance lama jika ada (untuk menghindari duplikasi/konflik)
+                // $(this).trigger('destroy.owl.carousel').removeClass('owl-loaded owl-hidden'); // Opsional, tergantung versi Owl
+                if (!$(this).hasClass("owl-carousel-initialized")) {
+                  // Tambah class custom untuk menandai
+                  $(this)
+                    .owlCarousel({
+                      items: 1,
+                      loop: $(this).find(".item").length > 1,
+                      margin: 0,
+                      nav: false,
+                      dots: $(this).find(".item").length > 1,
+                      autoplay: false,
+                    })
+                    .addClass("owl-carousel-initialized");
+                } else {
+                  // Jika sudah pernah, mungkin perlu refresh atau update
+                  // $(this).trigger('refresh.owl.carousel');
+                }
+              });
+          }
+
+          // Re-initialize WOW.js
+          if (typeof WOW !== "undefined") {
+            new WOW().init();
+          }
+        }
+
+        // Fungsi untuk update jumlah produk di kategori
+        function updateCategoryCounts() {
+          const categoryCounts = {};
+          allProductsData.forEach((product) => {
+            if (product.category) {
+              categoryCounts[product.category] =
+                (categoryCounts[product.category] || 0) + 1;
+            }
+          });
+
+          // Update count untuk "Semua Produk"
+          const allCategorySpan = categoryLinksContainer.querySelector(
+            'span[data-count-category="all"]'
+          );
+          if (allCategorySpan) {
+            allCategorySpan.textContent = `(${allProductsData.length})`;
+          }
+
+          // Update count untuk kategori lainnya
+          for (const categoryKey in categoryCounts) {
+            const spanElement = categoryLinksContainer.querySelector(
+              `span[data-count-category="${categoryKey}"]`
+            );
+            if (spanElement) {
+              spanElement.textContent = `(${categoryCounts[categoryKey]})`;
+            }
+          }
+        }
+
+        // Fungsi untuk menangani klik pada link kategori
+        function handleCategoryClick(event) {
+          event.preventDefault(); // Mencegah link berpindah halaman
+          const clickedLink = event.target.closest("a[data-category]");
+          if (!clickedLink) return;
+
+          const selectedCategory = clickedLink.dataset.category;
+
+          // Hapus kelas 'active' dari semua link kategori
+          categoryLinksContainer
+            .querySelectorAll("a[data-category]")
+            .forEach((link) => {
+              link.classList.remove("active");
+            });
+          // Tambahkan kelas 'active' ke link yang diklik
+          clickedLink.classList.add("active");
+
+          if (selectedCategory === "all") {
+            renderProducts(allProductsData);
+          } else {
+            const filteredProducts = allProductsData.filter(
+              (product) => product.category === selectedCategory
+            );
+            renderProducts(filteredProducts);
+          }
+        }
+
+        // Fetch data produk
+        fetch(productsJsonPath)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((products) => {
+            allProductsData = products; // Simpan semua produk
+            renderProducts(allProductsData); // Tampilkan semua produk saat pertama kali
+            updateCategoryCounts(); // Update jumlah di sidebar
+
+            // Tambahkan event listener ke semua link kategori di sidebar
+            if (categoryLinksContainer) {
+              categoryLinksContainer.addEventListener(
+                "click",
+                handleCategoryClick
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Gagal memuat atau memproses products.json:", error);
+            productListContainer.innerHTML =
+              '<p class="col-12 text-center text-danger">Gagal memuat produk. Silakan coba lagi nanti.</p>';
+          });
+      });
+
       document.addEventListener("DOMContentLoaded", function () {
         const productListContainer =
           document.querySelector(".product-list.row");
