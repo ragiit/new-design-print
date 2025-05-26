@@ -97,6 +97,14 @@
           >
             <div class="manage-icons d-inline-block">
               <ul>
+                <!-- <li class="d-inline-block">
+                  <a
+                    id="add_search_box"
+                    href="javascript:void(0);"
+                    title="Cari Produk"
+                    ><i class="fas fa-search search-sidebar-hover"></i
+                  ></a>
+                </li> -->
                 <li class="d-inline-block mini-menu-card" id="mini-menu-card">
                   <a
                     class="nav-link collapsePagesSideMenu"
@@ -123,7 +131,7 @@
                           <div class="img-holder ml-1 mr-2">
                             <a href="#"
                               ><img
-                                src="img/img_1.jpg"
+                                src="shop/img/img_1.jpg"
                                 class="align-self-center"
                                 alt="Payung Custom Mini"
                             /></a>
@@ -135,6 +143,28 @@
                             <p class="category">Desain Sesuai Keinginan</p>
                             <p class="price">
                               <span>Rp 75.000</span> (x1)
+                              <a href="#" title="Hapus Item">
+                                <i class="fa fa-trash dustbin"></i
+                              ></a>
+                            </p>
+                          </div>
+                        </div>
+                        <div class="media">
+                          <div class="img-holder ml-1 mr-2">
+                            <a href="#"
+                              ><img
+                                src="shop/img/img_1.jpg"
+                                class="align-self-center"
+                                alt="Kaos Custom Mini"
+                            /></a>
+                          </div>
+                          <div class="media-body mt-auto mb-auto">
+                            <h5 class="name">
+                              <a href="#">Kaos Sablon Satuan</a>
+                            </h5>
+                            <p class="category">Print DTF Full Color</p>
+                            <p class="price">
+                              <span>Rp 85.000</span> (x1)
                               <a href="#" title="Hapus Item">
                                 <i class="fa fa-trash dustbin"></i
                               ></a>
@@ -628,7 +658,7 @@
                 </p>
               </div>
               <div class="col-12 product-listing-products">
-                <div id="product-list" class="product-list row"></div>
+                <div class="product-list row"></div>
               </div>
             </div>
           </div>
@@ -707,9 +737,9 @@
           <div class="col-sm-12 col-lg-3 f-sec3 text-center text-lg-left">
             <h4>Produk Populer Kami</h4>
             <div class="foot-tag-list">
-              <span>Payung Promosi</span> <span>Mug Souvenir</span>
-              <span>Topi Bordir</span> <span>Tas Goodie Bag</span>
-              <span>Merchandise</span>
+              <span>Kaos Custom</span> <span>Payung Promosi</span>
+              <span>Mug Souvenir</span> <span>Topi Bordir</span>
+              <span>Tas Goodie Bag</span> <span>Merchandise</span>
               <span>Stiker</span>
             </div>
           </div>
@@ -927,51 +957,131 @@
     <!-- Custom Script -->
     <script src="../shop/js/script.js"></script>
     <script>
-      fetch("data/products.json")
-        .then((response) => response.json())
-        .then((products) => {
-          const container = document.getElementById("product-list");
+      document.addEventListener("DOMContentLoaded", function () {
+        const productListContainer =
+          document.querySelector(".product-list.row");
+        // Pastikan path ke products.json benar.
+        // Jika file HTML ini ada di dalam folder 'shop', dan products.json ada di root, pathnya '../products.json'
+        // Jika products.json ada di folder 'shop' juga, pathnya 'products.json'
+        const productsJsonPath = "data/products.json"; // Sesuaikan path ini jika perlu
 
-          products.forEach((product, index) => {
-            const delay = 0.2 + index * 0.1;
-            const waLink = `https://wa.me/+6285156615269?text=${encodeURIComponent(
-              product.whatsappMessage
-            )}`;
+        // Nomor WhatsApp Anda (ganti dengan nomor yang benar)
+        const yourWhatsAppNumber = "+6285156615269"; // Ganti dengan nomor WA Anda
 
-            const imagesHtml = product.images
-              .map(
-                (img) => `
-          <div class="item p-item-img">
-            <img src="${img}" alt="${product.description}" />
-            <div class="text-center d-flex justify-content-center align-items-center">
-              <a class="listing-cart-icon" href="${waLink}" target="_blank" title="Pesan via WhatsApp">
-                <i class="fab fa-whatsapp"></i>
-              </a>
-            </div>
-          </div>
-        `
-              )
-              .join("");
+        fetch(productsJsonPath)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((products) => {
+            productListContainer.innerHTML = ""; // Kosongkan container sebelum mengisi
+            let wowDelay = 0.2; // Untuk animasi WOW.js
 
-            const productHtml = `
-          <div class="col-12 col-md-6 col-lg-4 manage-color-hover wow slideInUp" data-wow-delay="${delay.toFixed(
-            1
-          )}s">
-            <div class="product-item owl-theme product-listing-carousel owl-carousel">
-              ${imagesHtml}
-            </div>
-            <div class="p-item-detail">
-              <h4 class="text-center p-item-name">
-                <a href="javascript:void(0);">${product.name}</a>
-              </h4>
-              <p class="text-center p-item-price">Info & Pesan via WA</p>
-            </div>
-          </div>
-        `;
+            products.forEach((product) => {
+              // Membuat bagian carousel gambar untuk setiap produk
+              let imageCarouselItemsHTML = "";
+              if (product.images && product.images.length > 0) {
+                product.images.forEach((imageSrc) => {
+                  waName = `Halo, Saya tertarik dengan produk ${product.name}. Bisa bantu saya dengan informasi lebih lanjut? Terima kasih!`;
+                  product.whatsappMessage = ``;
+                  imageCarouselItemsHTML += `
+                    <div class="item p-item-img">
+                      <img src="${imageSrc}" alt="${
+                    product.name
+                  } - New Design Print" />
+                      <div class="text-center d-flex justify-content-center align-items-center">
+                        <a class="listing-cart-icon"
+                           href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                    `${waName}`
+                  )}"
+                           target="_blank"
+                           title="Pesan via WhatsApp">
+                          <i class="fab fa-whatsapp"></i>
+                        </a>
+                      </div>
+                    </div>
+                  `;
+                });
+              } else {
+                // Fallback jika tidak ada gambar
+                waName = `Halo, Saya tertarik dengan produk ${product.name}. Bisa bantu saya dengan informasi lebih lanjut? Terima kasih!`;
 
-            container.insertAdjacentHTML("beforeend", productHtml);
+                imageCarouselItemsHTML = `
+                  <div class="item p-item-img">
+                    <img src="img/img_placeholder.jpg" alt="${
+                      product.name
+                    } - Tidak ada gambar" />
+                     <div class="text-center d-flex justify-content-center align-items-center">
+                        <a class="listing-cart-icon"
+                           href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                  `${waName}`
+                )}"
+                           target="_blank"
+                           title="Pesan via WhatsApp">
+                          <i class="fab fa-whatsapp"></i>
+                        </a>
+                      </div>
+                  </div>
+                `;
+              }
+
+              const productItemHTML = `
+                <div class="col-12 col-md-6 col-lg-4 manage-color-hover wow slideInUp" data-wow-delay="${wowDelay.toFixed(
+                  1
+                )}s">
+                  <div class="product-item owl-theme product-listing-carousel owl-carousel">
+                    ${imageCarouselItemsHTML}
+                  </div>
+                  <div class="p-item-detail">
+                    <h4 class="text-center p-item-name">
+                      <a href="javascript:void(0);">${product.name}</a>
+                    </h4>
+                    <p class="text-center p-item-price">
+                      ${product.description || "Info & Pesan via WA"}
+                    </p>
+                  </div>
+                </div>
+              `;
+              productListContainer.insertAdjacentHTML(
+                "beforeend",
+                productItemHTML
+              );
+              wowDelay += 0.1;
+              if (wowDelay > 0.9) wowDelay = 0.2; // Reset delay agar tidak terlalu lama
+            });
+
+            // Setelah semua item produk ditambahkan ke DOM:
+            // 1. Inisialisasi ulang Owl Carousel untuk elemen yang baru ditambahkan
+            if (typeof $ !== "undefined" && $.fn.owlCarousel) {
+              $(".product-listing-carousel").each(function () {
+                // Hanya inisialisasi jika belum diinisialisasi
+                if (!$(this).hasClass("owl-loaded")) {
+                  $(this).owlCarousel({
+                    items: 1,
+                    loop: $(this).find(".item").length > 1, // Loop hanya jika ada lebih dari 1 gambar
+                    margin: 0,
+                    nav: false, // Biasanya false untuk slider gambar produk
+                    dots: $(this).find(".item").length > 1, // Tampilkan dots jika lebih dari 1 gambar
+                    autoplay: false,
+                    // Tambahkan opsi lain jika ada di script.js asli Anda
+                  });
+                }
+              });
+            }
+
+            // 2. Inisialisasi ulang WOW.js untuk menganimasi elemen baru
+            if (typeof WOW !== "undefined") {
+              new WOW().init();
+            }
+          })
+          .catch((error) => {
+            console.error("Gagal memuat atau memproses products.json:", error);
+            productListContainer.innerHTML =
+              '<p class="col-12 text-center text-danger">Gagal memuat produk. Silakan coba lagi nanti.</p>';
           });
-        });
+      });
     </script>
   </body>
 </html>
