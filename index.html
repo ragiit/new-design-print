@@ -20,9 +20,7 @@
       content="Creative, modern, clean, bootstrap responsive, html5, css3, portfolio, blog, studio, templates, multipurpose, one page, corporate, start-up, studio, branding, designer, freelancer, carousel, parallax, photography, studio, masonry, grid, faq"
     />
     <!-- Page Title -->
-    <title>
-      New Design Print | Solusi Produk Custom Berkualitas | Beranda
-    </title>
+    <title>New Design Print | Solusi Produk Custom Berkualitas | Beranda</title>
     <!-- Favicon -->
     <link rel="icon" href="shop/img/favicon.ico" />
     <!-- Bundle -->
@@ -1105,14 +1103,24 @@
                 <div data-filter=".promosi" class="cbp-filter-item">
                   Media Promosi
                 </div>
-                <div data-filter=".tas" class="cbp-filter-item">
-                  Tas & Kemasan
+                <div data-filter=".tas" class="cbp-filter-item">Tas</div>
+                <div data-filter=".packaging" class="cbp-filter-item">
+                  Kemasan
+                </div>
+                <div data-filter=".sticker" class="cbp-filter-item">
+                  Sticker
+                </div>
+                <div data-filter=".identitas" class="cbp-filter-item">
+                  Produk Identitas
+                </div>
+                <div data-filter=".office" class="cbp-filter-item">
+                  Perlengkapan Kantor
                 </div>
                 <div
-                  data-filter=".lainnya"
+                  data-filter=".printing"
                   class="cbp-filter-item cbp-l-filters-list-last"
                 >
-                  Lainnya
+                  Cetak Lainnya
                 </div>
               </div>
             </div>
@@ -1645,81 +1653,175 @@
         fetch(portfolioJsonPath)
           .then((response) => {
             if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
+              throw new Error(
+                `HTTP error! status: ${response.status} saat mencoba mengambil ${portfolioJsonPath}`
+              );
             }
             return response.json();
           })
           .then((portfolioItems) => {
-            portfolioGrid.innerHTML = "";
+            portfolioGrid.innerHTML = ""; // Kosongkan grid sebelum mengisi
 
-            if (portfolioItems.length === 0) {
+            if (!portfolioItems || portfolioItems.length === 0) {
               portfolioGrid.innerHTML =
                 "<p class='col-12 text-center'>Tidak ada item portofolio saat ini.</p>";
               return;
             }
 
             portfolioItems.forEach((item) => {
-              const categoriesClasses = item.categories.join(" ");
-              let imagesHTML = "";
+              const categoriesClasses =
+                item.categories && Array.isArray(item.categories)
+                  ? item.categories.join(" ")
+                  : "";
 
-              item.images.forEach((img) => {
-                imagesHTML += `
-            <div class="item">
-              <a
-                href="${img.src}"
-                class="cbp-caption"
-                data-fancybox="${item.fancyboxGallery || item.id}"
-                data-title="${img.title || item.title}"
-              ><img
-                src="${img.src}"
-                alt="${img.alt || item.title}"
-                style="width: 100%; height: 250px; object-fit: cover;"
-              /></a>
-            </div>
-          `;
-              });
+              let imagesHTML = "";
+              if (item.images && item.images.length > 0) {
+                item.images.forEach((img) => {
+                  imagesHTML += `
+                            <div class="item">
+                                <a
+                                    href="${img.src || "#"}"
+                                    class="cbp-caption"
+                                    data-fancybox="${
+                                      item.fancyboxGallery ||
+                                      item.id ||
+                                      "portfolio-gallery"
+                                    }"
+                                    data-title="${
+                                      img.title || item.title || ""
+                                    }"
+                                >
+                                    <img
+                                        src="${
+                                          img.src || "shop/img/placeholder.jpg"
+                                        }"
+                                        alt="${
+                                          img.alt ||
+                                          item.title ||
+                                          "Gambar Portofolio"
+                                        }"
+                                        style="width: 100%; height: 250px; object-fit: cover;"
+                                    />
+                                </a>
+                            </div>
+                        `;
+                });
+              } else {
+                imagesHTML = `
+                        <div class="item">
+                            <img
+                                src="shop/img/placeholder.jpg"
+                                alt="${item.title || "Gambar tidak tersedia"}"
+                                style="width: 100%; height: 250px; object-fit: cover;"
+                            />
+                        </div>`;
+              }
 
               const portfolioItemHTML = `
-          <div class="cbp-item ${categoriesClasses} wow slideInUp">
-            <div class="cbp-caption-defaultWrap owl-theme sync-portfolio-carousel owl-carousel">
-              ${imagesHTML}
-            </div>
-            <div class="row">
-              <div class="col-12 text-center">
-                <a
-                  href="javascript:void(0);"
-                  class="cbp-l-grid-blog-title portfolio-title"
-                >${item.title}</a>
-              </div>
-              <div class="col-12 text-center">
-                <div class="cbp-l-grid-blog-desc portfolio-des">
-                  ${item.description}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
+                    <div class="cbp-item ${categoriesClasses} wow slideInUp">
+                        <div class="cbp-caption-defaultWrap owl-theme sync-portfolio-carousel owl-carousel">
+                            ${imagesHTML}
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12 text-center">
+                                <a
+                                    href="${item.link || "javascript:void(0);"}"
+                                    class="cbp-l-grid-blog-title portfolio-title"
+                                >${item.title || "Judul Portofolio"}</a>
+                            </div>
+                            <div class="col-12 text-center">
+                                <div class="cbp-l-grid-blog-desc portfolio-des">
+                                    ${item.description || ""}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
               portfolioGrid.insertAdjacentHTML("beforeend", portfolioItemHTML);
             });
 
-            // --- TIDAK ADA CUBEPROTFOLIO DI SINI ---
+            // --- INISIALISASI PLUGIN SETELAH SEMUA ITEM DIMUAT KE DOM ---
 
-            // Inisialisasi Owl Carousel
-            // $(".sync-portfolio-carousel").each(function () {
-            //   const $thisCarousel = $(this);
-            //   if ($thisCarousel.hasClass("owl-loaded")) {
-            //     $thisCarousel.trigger("destroy.owl.carousel");
-            //   }
-            //   $thisCarousel.owlCarousel({
-            //     items: 1,
-            //     loop: $thisCarousel.find(".item").length > 1,
-            //     nav: false,
-            //     dots: true,
-            //   });
-            // });
+            // 1. Inisialisasi Cube Portfolio
+            if (
+              typeof $ !== "undefined" &&
+              $.fn.cubeportfolio &&
+              portfolioItems.length > 0
+            ) {
+              // Hancurkan instance Cube Portfolio yang mungkin sudah ada
+              if ($("#js-grid-blog-posts").data("cubeportfolio")) {
+                $("#js-grid-blog-posts").cubeportfolio("destroy");
+                console.log(
+                  "Cube Portfolio: Instance lama dihancurkan sebelum inisialisasi ulang."
+                );
+              }
 
-            // Fancybox
-            if (typeof $.fancybox !== "undefined") {
+              $("#js-grid-blog-posts").cubeportfolio({
+                filters: "#js-filters-blog-posts",
+                layoutMode: "grid",
+                defaultFilter: "*",
+                animationType: "fadeOutTop",
+                gapHorizontal: 20,
+                gapVertical: 20,
+                gridAdjustment: "responsive",
+                mediaQueries: [
+                  { width: 1200, cols: 3 },
+                  { width: 992, cols: 3 },
+                  { width: 768, cols: 2 },
+                  { width: 480, cols: 1 },
+                  { width: 320, cols: 1 },
+                ],
+                caption: "overlayBottomPush",
+                displayType: "fadeIn",
+                displayTypeSpeed: 100,
+              });
+              console.log("Cube Portfolio: Berhasil diinisialisasi.");
+            } else {
+              if (portfolioItems.length > 0) {
+                // Hanya tampilkan warning jika ada item tapi plugin tidak ada
+                if (typeof $ === "undefined" || !$.fn.cubeportfolio) {
+                  console.warn(
+                    "Cube Portfolio: jQuery atau plugin Cube Portfolio tidak ditemukan."
+                  );
+                }
+              }
+            }
+
+            // 2. Inisialisasi Owl Carousel
+            if (
+              typeof $ !== "undefined" &&
+              $.fn.owlCarousel &&
+              portfolioItems.length > 0
+            ) {
+              $(".sync-portfolio-carousel").each(function () {
+                const $thisCarousel = $(this);
+                // Opsional: Hancurkan jika diinisialisasi ulang di konteks lain
+                // if ($thisCarousel.hasClass("owl-loaded")) {
+                //     $thisCarousel.trigger("destroy.owl.carousel");
+                // }
+                $thisCarousel.owlCarousel({
+                  items: 1,
+                  loop: $thisCarousel.find(".item").length > 1,
+                  nav: false,
+                  dots: true,
+                });
+              });
+            } else {
+              if (portfolioItems.length > 0) {
+                if (typeof $ === "undefined" || !$.fn.owlCarousel) {
+                  console.warn(
+                    "Owl Carousel: jQuery atau plugin Owl Carousel tidak ditemukan."
+                  );
+                }
+              }
+            }
+
+            // 3. Inisialisasi Fancybox
+            if (
+              typeof $ !== "undefined" &&
+              $.fancybox &&
+              portfolioItems.length > 0
+            ) {
               $("[data-fancybox]").fancybox({
                 buttons: [
                   "slideShow",
@@ -1731,16 +1833,32 @@
                 ],
                 loop: true,
               });
+            } else {
+              if (portfolioItems.length > 0) {
+                if (typeof $ === "undefined" || !$.fancybox) {
+                  console.warn(
+                    "Fancybox: jQuery atau plugin Fancybox tidak ditemukan."
+                  );
+                }
+              }
             }
 
-            // WOW.js
+            // 4. Inisialisasi WOW.js
             if (typeof WOW !== "undefined") {
-              new WOW().init();
+              // Cek apakah ada elemen .wow sebelum init untuk WOW.js yang mungkin tidak memerlukan re-init global
+              if (document.querySelector("#js-grid-blog-posts .wow")) {
+                new WOW({ boxClass: "wow", live: false }).init(); // Inisialisasi WOW hanya untuk item baru jika perlu, atau init global
+              }
+            } else {
+              if (document.querySelector(".wow")) {
+                // Cek jika ada elemen .wow di seluruh dokumen
+                console.warn("WOW.js: Library WOW.js tidak ditemukan.");
+              }
             }
           })
           .catch((error) => {
             console.error(
-              "Gagal memuat atau memproses portfolio_gallery.json:",
+              "Portfolio Error: Gagal memuat atau memproses data.",
               error
             );
             if (portfolioGrid) {
