@@ -1,5 +1,19 @@
 [
   {
+    "name": "Payung Custom",
+    "images": ["img/products/payung-1.jpg", "img/products/payung-2.jpg", "img/products/payung-3.jpg", "img/products/payung-4.jpg", "img/products/payung-5.jpg", "img/products/payung-6.jpg"],
+    "description": "Payung custom dengan desain unik sesuai permintaan Anda.",
+    "category": "souvenir-merchandise",
+    "price": 100000
+  },
+  {
+    "name": "Tumbler Custom",
+    "images": ["img/products/tumbler-1.jpg", "img/products/tumbler-2.jpg", "img/products/tumbler-3.jpg"],
+    "description": "Tumbler stainless steel dengan desain custom yang menarik.",
+    "category": "drinkware-custom",
+    "price": 85000
+  },
+  {
     "name": "Kaos Sablon Satuan",
     "images": ["img/img_1.jpg", "img/img_1.jpg"],
     "description": "Kaos Sablon Custom New Design Print",

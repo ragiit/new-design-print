@@ -35,6 +35,26 @@
     <link rel="stylesheet" href="../shop/css/style.css" />
     <!-- Custom Css  -->
     <link rel="stylesheet" href="../shop/css/custom.css" />
+    <style>
+      /* di file style.css Anda */
+      .product-image-fixed {
+        width: 200px;
+        height: 150px;
+        object-fit: cover;
+      }
+      .p-item-price {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Batasi teks hingga 2 baris */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* Properti di bawah ini opsional, tapi bisa membantu menjaga konsistensi tinggi */
+        /* line-height: 1.4em; */ /* Sesuaikan dengan font-size dan desain Anda */
+        /* max-height: 2.8em; */ /* Kira-kira line-height * 2 (jumlah baris) */
+        /* Pastikan juga untuk mengatur height atau min-height pada .p-item-detail jika perlu */
+        /* agar semua card memiliki tinggi yang sama meskipun deskripsinya pendek */
+      }
+    </style>
   </head>
   <body>
     <a class="scroll-top-arrow" href="javascript:void(0);"
@@ -994,8 +1014,6 @@
         let allProductsData = [];
         let priceSliderInstance = null; // Untuk menyimpan instance noUiSlider
 
-        // Fungsi untuk merender daftar produk ke DOM (tetap sama seperti sebelumnya)
-        // Fungsi untuk merender daftar produk ke DOM
         function renderProducts(productsToDisplay) {
           productListContainer.innerHTML = ""; // Kosongkan container
           let wowDelay = 0.2;
@@ -1011,352 +1029,24 @@
 
           productsToDisplay.forEach((product) => {
             let imageCarouselItemsHTML = "";
-            if (product.images && product.images.length > 0) {
-              product.images.forEach((imageSrc) => {
-                imageCarouselItemsHTML += `
-              <div class="item p-item-img">
-                <img src="${imageSrc}" alt="${
-                  product.name
-                } - New Design Print" />
-                <div class="text-center d-flex justify-content-center align-items-center">
-                  <a class="listing-cart-icon"
-                     href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
-                  product.whatsappMessage
-                )}"
-                     target="_blank"
-                     title="Pesan via WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                  </a>
-                </div>
-              </div>
-            `;
-              });
-            } else {
-              imageCarouselItemsHTML = `
-            <div class="item p-item-img">
-              <img src="img/img_placeholder.jpg" alt="${
-                product.name
-              } - Tidak ada gambar" />
-              <div class="text-center d-flex justify-content-center align-items-center">
-                <a class="listing-cart-icon"
-                   href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
-                product.whatsappMessage
-              )}"
-                   target="_blank"
-                   title="Pesan via WhatsApp">
-                  <i class="fab fa-whatsapp"></i>
-                </a>
-              </div>
-            </div>
-          `;
-            }
+            // Definisikan pesan WhatsApp di sini agar konsisten
+            const whatsappMessageText = `Halo, Saya tertarik dengan produk ${product.name}. Bisa bantu saya dengan informasi lebih lanjut? Terima kasih!`;
 
-            const productItemHTML = `
-          <div class="col-12 col-md-6 col-lg-4 manage-color-hover wow slideInUp" data-wow-delay="${wowDelay.toFixed(
-            1
-          )}s">
-            <div class="product-item owl-theme product-listing-carousel owl-carousel">
-              ${imageCarouselItemsHTML}
-            </div>
-            <div class="p-item-detail">
-              <h4 class="text-center p-item-name">
-                <a href="javascript:void(0);">${product.name}</a>
-              </h4>
-              <p class="text-center p-item-price">
-                ${product.description || "Info & Pesan via WA"}
-              </p>
-              ${
-                product.price
-                  ? `<p class="text-center p-item-actual-price">Rp ${product.price.toLocaleString(
-                      "id-ID"
-                    )}</p>`
-                  : ""
-              }
-            </div>
-          </div>
-        `;
-            productListContainer.insertAdjacentHTML(
-              "beforeend",
-              productItemHTML
-            );
-            wowDelay += 0.1;
-            if (wowDelay > 0.9) wowDelay = 0.2;
-          });
-
-          if (typeof $ !== "undefined" && $.fn.owlCarousel) {
-            $(productListContainer)
-              .find(".product-listing-carousel")
-              .each(function () {
-                // Hancurkan instance lama jika ada untuk menghindari konflik
-                if ($(this).hasClass("owl-carousel-initialized")) {
-                  // $(this).trigger('destroy.owl.carousel').removeClass('owl-carousel-initialized owl-loaded owl-hidden');
-                }
-                // Inisialisasi hanya jika belum
-                if (!$(this).hasClass("owl-carousel-initialized")) {
-                  $(this)
-                    .owlCarousel({
-                      items: 1,
-                      loop: $(this).find(".item").length > 1,
-                      margin: 0,
-                      nav: false,
-                      dots: $(this).find(".item").length > 1,
-                      autoplay: false,
-                    })
-                    .addClass("owl-carousel-initialized");
-                }
-              });
-          }
-          if (typeof WOW !== "undefined") {
-            new WOW().init();
-          }
-        }
-
-        // Fungsi untuk update jumlah produk di kategori (tetap sama)
-        function updateCategoryCounts() {
-          const categoryCounts = {};
-          allProductsData.forEach((product) => {
-            if (product.category) {
-              categoryCounts[product.category] =
-                (categoryCounts[product.category] || 0) + 1;
-            }
-          });
-          const allCategorySpan = categoryLinksContainer.querySelector(
-            'span[data-count-category="all"]'
-          );
-          if (allCategorySpan) {
-            allCategorySpan.textContent = `(${allProductsData.length})`;
-          }
-          for (const categoryKey in categoryCounts) {
-            const spanElement = categoryLinksContainer.querySelector(
-              `span[data-count-category="${categoryKey}"]`
-            );
-            if (spanElement) {
-              spanElement.textContent = `(${categoryCounts[categoryKey]})`;
-            }
-          }
-        }
-
-        // --- BARU: Inisialisasi noUiSlider ---
-        // --- BARU: Inisialisasi noUiSlider ---
-        function initializePriceSlider(minPrice, maxPrice) {
-          if (!priceSliderElement || typeof noUiSlider === "undefined") {
-            console.warn(
-              "Elemen price slider atau library noUiSlider tidak ditemukan."
-            );
-            return;
-          }
-
-          // Cek apakah slider sudah diinisialisasi pada elemen DOM ini.
-          // noUiSlider biasanya menambahkan properti '.noUiSlider' ke elemen DOM saat inisialisasi.
-          if (priceSliderElement.noUiSlider) {
-            // Jika sudah ada instance, hancurkan terlebih dahulu.
-            try {
-              priceSliderElement.noUiSlider.destroy();
-              console.log("Instance noUiSlider yang ada telah dihancurkan.");
-            } catch (e) {
-              console.warn(
-                "Tidak dapat menghancurkan instance noUiSlider yang ada:",
-                e
-              );
-              // Jika gagal dihancurkan, mungkin lebih baik tidak melanjutkan
-              // untuk menghindari error lebih lanjut atau perilaku tak terduga.
-              // Namun, untuk kasus ini, kita bisa coba tetap membuat yang baru.
-            }
-          }
-
-          // Tentukan nilai awal untuk slider, pastikan min tidak lebih besar dari max.
-          const sliderStartMin = minPrice >= 0 ? minPrice : 0; // minPrice tidak boleh negatif
-          let sliderStartMax = maxPrice > 0 ? maxPrice : 500000; // Default max jika tidak ada harga produk valid
-
-          // Pastikan maxPrice selalu lebih besar dari minPrice untuk slider
-          if (sliderStartMax <= sliderStartMin) {
-            sliderStartMax = sliderStartMin + 1000; // Beri sedikit jarak jika sama atau lebih kecil
-          }
-
-          try {
-            priceSliderInstance = noUiSlider.create(priceSliderElement, {
-              start: [sliderStartMin, sliderStartMax],
-              connect: true,
-              step: 1000, // Sesuaikan step jika perlu
-              range: {
-                min: sliderStartMin,
-                max: sliderStartMax,
-              },
-              format: {
-                to: function (value) {
-                  return Math.round(value);
-                },
-                from: function (value) {
-                  return Math.round(value);
-                },
-              },
-            });
-            console.log("Instance noUiSlider berhasil dibuat/dibuat ulang.");
-
-            priceSliderInstance.on("update", function (values, handle) {
-              if (minPriceDisplay && maxPriceDisplay) {
-                minPriceDisplay.textContent = `Rp ${parseInt(
-                  values[0]
-                ).toLocaleString("id-ID")}`;
-                maxPriceDisplay.textContent = `Rp ${parseInt(
-                  values[1]
-                ).toLocaleString("id-ID")}`;
-              }
-            });
-          } catch (e) {
-            console.error("Error saat membuat instance noUiSlider:", e);
-            // Error ini bisa terjadi jika 'destroy' tidak sepenuhnya membersihkan
-            // atau ada kondisi lain yang menghalangi pembuatan.
-          }
-        }
-
-        // --- BARU / MODIFIKASI: Fungsi untuk menerapkan SEMUA filter ---
-        function applyAllFilters() {
-          let filteredProducts = [...allProductsData]; // Salin array agar tidak mengubah data asli
-
-          // 1. Filter berdasarkan kategori aktif
-          const activeCategoryLink = categoryLinksContainer.querySelector(
-            "a[data-category].active"
-          );
-          const selectedCategory = activeCategoryLink
-            ? activeCategoryLink.dataset.category
-            : "all";
-
-          if (selectedCategory !== "all") {
-            filteredProducts = filteredProducts.filter(
-              (product) => product.category === selectedCategory
-            );
-          }
-
-          // 2. Filter berdasarkan rentang harga dari slider
-          if (priceSliderInstance) {
-            const priceRange = priceSliderInstance.get(); // [min, max]
-            const minSelectedPrice = parseInt(priceRange[0]);
-            const maxSelectedPrice = parseInt(priceRange[1]);
-
-            filteredProducts = filteredProducts.filter((product) => {
-              // Pastikan produk memiliki harga dan merupakan angka
-              if (typeof product.price !== "number" || isNaN(product.price)) {
-                return false; // Abaikan produk tanpa harga atau harga tidak valid untuk filter harga
-              }
-              return (
-                product.price >= minSelectedPrice &&
-                product.price <= maxSelectedPrice
-              );
-            });
-          }
-          renderProducts(filteredProducts);
-        }
-
-        // Fungsi untuk menangani klik pada link kategori (MODIFIKASI untuk memanggil applyAllFilters)
-        function handleCategoryClick(event) {
-          event.preventDefault();
-          const clickedLink = event.target.closest("a[data-category]");
-          if (!clickedLink) return;
-
-          categoryLinksContainer
-            .querySelectorAll("a[data-category]")
-            .forEach((link) => {
-              link.classList.remove("active");
-            });
-          clickedLink.classList.add("active");
-          applyAllFilters(); // Panggil fungsi filter gabungan
-        }
-
-        // Fetch data produk
-        fetch(productsJsonPath)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((products) => {
-            allProductsData = products;
-
-            // --- BARU: Tentukan min/max harga dari semua produk ---
-            let minProductPrice = 0;
-            let maxProductPrice = 0;
-            const validPrices = allProductsData
-              .filter((p) => typeof p.price === "number")
-              .map((p) => p.price);
-
-            if (validPrices.length > 0) {
-              minProductPrice = Math.min(...validPrices);
-              maxProductPrice = Math.max(...validPrices);
-            } else {
-              // Default jika tidak ada harga sama sekali
-              minProductPrice = 0;
-              maxProductPrice = 500000; // Atur default max range yang masuk akal
-            }
-            // Pastikan maxPrice lebih besar dari minPrice untuk slider
-            if (maxProductPrice <= minProductPrice && validPrices.length > 0)
-              maxProductPrice = minProductPrice + 1000;
-
-            initializePriceSlider(minProductPrice, maxProductPrice); // Inisialisasi slider
-            renderProducts(allProductsData);
-            updateCategoryCounts();
-
-            if (categoryLinksContainer) {
-              categoryLinksContainer.addEventListener(
-                "click",
-                handleCategoryClick
-              );
-            }
-
-            // --- BARU: Event listener untuk tombol "Filter Produk" ---
-            if (applyFiltersButton) {
-              applyFiltersButton.addEventListener("click", function () {
-                applyAllFilters();
-              });
-            }
-          })
-          .catch((error) => {
-            console.error("Gagal memuat atau memproses products.json:", error);
-            productListContainer.innerHTML =
-              '<p class="col-12 text-center text-danger">Gagal memuat produk. Silakan coba lagi nanti.</p>';
-          });
-      });
-      document.addEventListener("DOMContentLoaded", function () {
-        const productListContainer =
-          document.querySelector(".product-list.row");
-        const categoryLinksContainer = document.getElementById("category-list"); // Container untuk link kategori
-        const productsJsonPath = "data/products.json";
-        const yourWhatsAppNumber = "+6285156615123";
-
-        let allProductsData = []; // Untuk menyimpan semua data produk dari JSON
-
-        // Fungsi untuk merender daftar produk ke DOM
-        function renderProducts(productsToDisplay) {
-          productListContainer.innerHTML = ""; // Kosongkan container
-          let wowDelay = 0.2;
-
-          if (productsToDisplay.length === 0) {
-            productListContainer.innerHTML =
-              '<p class="col-12 text-center">Tidak ada produk dalam kategori ini.</p>';
-            // Re-initialize WOW.js jika ada perubahan besar pada DOM, meski kosong
-            if (typeof WOW !== "undefined") {
-              new WOW().init();
-            }
-            return;
-          }
-
-          productsToDisplay.forEach((product) => {
-            let imageCarouselItemsHTML = "";
             if (product.images && product.images.length > 0) {
               product.images.forEach((imageSrc) => {
                 imageCarouselItemsHTML += `
                   <div class="item p-item-img">
                     <img src="${imageSrc}" alt="${
                   product.name
-                } - New Design Print" />
+                } - New Design Print" style="width: 200px; height: 150px; object-fit: cover;" />
                     <div class="text-center d-flex justify-content-center align-items-center">
                       <a class="listing-cart-icon"
-                         href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
-                  product.whatsappMessage
+                          href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                  // Gunakan variabel yang sudah didefinisikan
+                  whatsappMessageText
                 )}"
-                         target="_blank"
-                         title="Pesan via WhatsApp">
+                          target="_blank"
+                          title="Pesan via WhatsApp">
                         <i class="fab fa-whatsapp"></i>
                       </a>
                     </div>
@@ -1364,18 +1054,20 @@
                 `;
               });
             } else {
+              // Fallback jika tidak ada gambar
               imageCarouselItemsHTML = `
                 <div class="item p-item-img">
                   <img src="img/img_placeholder.jpg" alt="${
                     product.name
-                  } - Tidak ada gambar" />
+                  } - Tidak ada gambar" style="width: 200px; height: 150px; object-fit: cover;" /> {/* MODIFIKASI DI SINI */}
                   <div class="text-center d-flex justify-content-center align-items-center">
                     <a class="listing-cart-icon"
-                       href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
-                product.whatsappMessage
+                        href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
+                // Gunakan variabel yang sudah didefinisikan
+                whatsappMessageText
               )}"
-                       target="_blank"
-                       title="Pesan via WhatsApp">
+                        target="_blank"
+                        title="Pesan via WhatsApp">
                       <i class="fab fa-whatsapp"></i>
                     </a>
                   </div>
@@ -1397,6 +1089,13 @@
                   <p class="text-center p-item-price">
                     ${product.description || "Info & Pesan via WA"}
                   </p>
+                  ${
+                    product.price
+                      ? `<p class="text-center p-item-actual-price">Rp ${product.price.toLocaleString(
+                          "id-ID"
+                        )}</p>`
+                      : ""
+                  }
                 </div>
               </div>
             `;
@@ -1408,15 +1107,14 @@
             if (wowDelay > 0.9) wowDelay = 0.2;
           });
 
-          // Re-initialize Owl Carousels untuk elemen yang baru ditambahkan
           if (typeof $ !== "undefined" && $.fn.owlCarousel) {
             $(productListContainer)
               .find(".product-listing-carousel")
               .each(function () {
-                // Hancurkan instance lama jika ada (untuk menghindari duplikasi/konflik)
-                // $(this).trigger('destroy.owl.carousel').removeClass('owl-loaded owl-hidden'); // Opsional, tergantung versi Owl
+                if ($(this).hasClass("owl-carousel-initialized")) {
+                  // $(this).trigger('destroy.owl.carousel').removeClass('owl-carousel-initialized owl-loaded owl-hidden');
+                }
                 if (!$(this).hasClass("owl-carousel-initialized")) {
-                  // Tambah class custom untuk menandai
                   $(this)
                     .owlCarousel({
                       items: 1,
@@ -1427,20 +1125,19 @@
                       autoplay: false,
                     })
                     .addClass("owl-carousel-initialized");
-                } else {
-                  // Jika sudah pernah, mungkin perlu refresh atau update
-                  // $(this).trigger('refresh.owl.carousel');
                 }
               });
           }
-
-          // Re-initialize WOW.js
           if (typeof WOW !== "undefined") {
             new WOW().init();
           }
         }
 
-        // Fungsi untuk update jumlah produk di kategori
+        // ... sisa kode Anda (updateCategoryCounts, initializePriceSlider, applyAllFilters, handleCategoryClick, fetch, etc.) ...
+        // Pastikan hanya ada SATU event listener DOMContentLoaded utama atau kelola skrip Anda
+        // agar fungsi-fungsi ini tidak didefinisikan ulang atau dijalankan berulang kali secara tidak sengaja.
+
+        // (MULAI DARI SINI adalah bagian penting untuk inisialisasi awal)
         function updateCategoryCounts() {
           const categoryCounts = {};
           allProductsData.forEach((product) => {
@@ -1449,16 +1146,12 @@
                 (categoryCounts[product.category] || 0) + 1;
             }
           });
-
-          // Update count untuk "Semua Produk"
           const allCategorySpan = categoryLinksContainer.querySelector(
             'span[data-count-category="all"]'
           );
           if (allCategorySpan) {
             allCategorySpan.textContent = `(${allProductsData.length})`;
           }
-
-          // Update count untuk kategori lainnya
           for (const categoryKey in categoryCounts) {
             const spanElement = categoryLinksContainer.querySelector(
               `span[data-count-category="${categoryKey}"]`
@@ -1469,34 +1162,106 @@
           }
         }
 
-        // Fungsi untuk menangani klik pada link kategori
+        function initializePriceSlider(minPrice, maxPrice) {
+          if (!priceSliderElement || typeof noUiSlider === "undefined") {
+            console.warn(
+              "Elemen price slider atau library noUiSlider tidak ditemukan."
+            );
+            return;
+          }
+          if (priceSliderElement.noUiSlider) {
+            try {
+              priceSliderElement.noUiSlider.destroy();
+              console.log("Instance noUiSlider yang ada telah dihancurkan.");
+            } catch (e) {
+              console.warn(
+                "Tidak dapat menghancurkan instance noUiSlider yang ada:",
+                e
+              );
+            }
+          }
+          const sliderStartMin = minPrice >= 0 ? minPrice : 0;
+          let sliderStartMax = maxPrice > 0 ? maxPrice : 500000;
+          if (sliderStartMax <= sliderStartMin) {
+            sliderStartMax = sliderStartMin + 1000;
+          }
+          try {
+            priceSliderInstance = noUiSlider.create(priceSliderElement, {
+              start: [sliderStartMin, sliderStartMax],
+              connect: true,
+              step: 1000,
+              range: {
+                min: sliderStartMin,
+                max: sliderStartMax,
+              },
+              format: {
+                to: function (value) {
+                  return Math.round(value);
+                },
+                from: function (value) {
+                  return Math.round(value);
+                },
+              },
+            });
+            console.log("Instance noUiSlider berhasil dibuat/dibuat ulang.");
+            priceSliderInstance.on("update", function (values, handle) {
+              if (minPriceDisplay && maxPriceDisplay) {
+                minPriceDisplay.textContent = `Rp ${parseInt(
+                  values[0]
+                ).toLocaleString("id-ID")}`;
+                maxPriceDisplay.textContent = `Rp ${parseInt(
+                  values[1]
+                ).toLocaleString("id-ID")}`;
+              }
+            });
+          } catch (e) {
+            console.error("Error saat membuat instance noUiSlider:", e);
+          }
+        }
+
+        function applyAllFilters() {
+          let filteredProducts = [...allProductsData];
+          const activeCategoryLink = categoryLinksContainer.querySelector(
+            "a[data-category].active"
+          );
+          const selectedCategory = activeCategoryLink
+            ? activeCategoryLink.dataset.category
+            : "all";
+          if (selectedCategory !== "all") {
+            filteredProducts = filteredProducts.filter(
+              (product) => product.category === selectedCategory
+            );
+          }
+          if (priceSliderInstance) {
+            const priceRange = priceSliderInstance.get();
+            const minSelectedPrice = parseInt(priceRange[0]);
+            const maxSelectedPrice = parseInt(priceRange[1]);
+            filteredProducts = filteredProducts.filter((product) => {
+              if (typeof product.price !== "number" || isNaN(product.price)) {
+                return false;
+              }
+              return (
+                product.price >= minSelectedPrice &&
+                product.price <= maxSelectedPrice
+              );
+            });
+          }
+          renderProducts(filteredProducts);
+        }
+
         function handleCategoryClick(event) {
-          event.preventDefault(); // Mencegah link berpindah halaman
+          event.preventDefault();
           const clickedLink = event.target.closest("a[data-category]");
           if (!clickedLink) return;
-
-          const selectedCategory = clickedLink.dataset.category;
-
-          // Hapus kelas 'active' dari semua link kategori
           categoryLinksContainer
             .querySelectorAll("a[data-category]")
             .forEach((link) => {
               link.classList.remove("active");
             });
-          // Tambahkan kelas 'active' ke link yang diklik
           clickedLink.classList.add("active");
-
-          if (selectedCategory === "all") {
-            renderProducts(allProductsData);
-          } else {
-            const filteredProducts = allProductsData.filter(
-              (product) => product.category === selectedCategory
-            );
-            renderProducts(filteredProducts);
-          }
+          applyAllFilters();
         }
 
-        // Fetch data produk
         fetch(productsJsonPath)
           .then((response) => {
             if (!response.ok) {
@@ -1505,150 +1270,42 @@
             return response.json();
           })
           .then((products) => {
-            allProductsData = products; // Simpan semua produk
-            renderProducts(allProductsData); // Tampilkan semua produk saat pertama kali
-            updateCategoryCounts(); // Update jumlah di sidebar
-
-            // Tambahkan event listener ke semua link kategori di sidebar
+            allProductsData = products;
+            let minProductPrice = 0;
+            let maxProductPrice = 0;
+            const validPrices = allProductsData
+              .filter((p) => typeof p.price === "number")
+              .map((p) => p.price);
+            if (validPrices.length > 0) {
+              minProductPrice = Math.min(...validPrices);
+              maxProductPrice = Math.max(...validPrices);
+            } else {
+              minProductPrice = 0;
+              maxProductPrice = 500000;
+            }
+            if (maxProductPrice <= minProductPrice && validPrices.length > 0)
+              maxProductPrice = minProductPrice + 1000;
+            initializePriceSlider(minProductPrice, maxProductPrice);
+            renderProducts(allProductsData); // Render awal dengan semua produk
+            updateCategoryCounts();
             if (categoryLinksContainer) {
               categoryLinksContainer.addEventListener(
                 "click",
                 handleCategoryClick
               );
             }
-          })
-          .catch((error) => {
-            console.error("Gagal memuat atau memproses products.json:", error);
-            productListContainer.innerHTML =
-              '<p class="col-12 text-center text-danger">Gagal memuat produk. Silakan coba lagi nanti.</p>';
-          });
-      });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const productListContainer =
-          document.querySelector(".product-list.row");
-        // Pastikan path ke products.json benar.
-        // Jika file HTML ini ada di dalam folder 'shop', dan products.json ada di root, pathnya '../products.json'
-        // Jika products.json ada di folder 'shop' juga, pathnya 'products.json'
-        const productsJsonPath = "data/products.json"; // Sesuaikan path ini jika perlu
-
-        // Nomor WhatsApp Anda (ganti dengan nomor yang benar)
-        const yourWhatsAppNumber = "+6285156615269"; // Ganti dengan nomor WA Anda
-
-        fetch(productsJsonPath)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((products) => {
-            productListContainer.innerHTML = ""; // Kosongkan container sebelum mengisi
-            let wowDelay = 0.2; // Untuk animasi WOW.js
-
-            products.forEach((product) => {
-              // Membuat bagian carousel gambar untuk setiap produk
-              let imageCarouselItemsHTML = "";
-              if (product.images && product.images.length > 0) {
-                product.images.forEach((imageSrc) => {
-                  waName = `Halo, Saya tertarik dengan produk ${product.name}. Bisa bantu saya dengan informasi lebih lanjut? Terima kasih!`;
-                  product.whatsappMessage = ``;
-                  imageCarouselItemsHTML += `
-                    <div class="item p-item-img">
-                      <img src="${imageSrc}" alt="${
-                    product.name
-                  } - New Design Print" />
-                      <div class="text-center d-flex justify-content-center align-items-center">
-                        <a class="listing-cart-icon"
-                           href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
-                    `${waName}`
-                  )}"
-                           target="_blank"
-                           title="Pesan via WhatsApp">
-                          <i class="fab fa-whatsapp"></i>
-                        </a>
-                      </div>
-                    </div>
-                  `;
-                });
-              } else {
-                // Fallback jika tidak ada gambar
-                waName = `Halo, Saya tertarik dengan produk ${product.name}. Bisa bantu saya dengan informasi lebih lanjut? Terima kasih!`;
-
-                imageCarouselItemsHTML = `
-                  <div class="item p-item-img">
-                    <img src="img/img_placeholder.jpg" alt="${
-                      product.name
-                    } - Tidak ada gambar" />
-                     <div class="text-center d-flex justify-content-center align-items-center">
-                        <a class="listing-cart-icon"
-                           href="https://wa.me/${yourWhatsAppNumber}?text=${encodeURIComponent(
-                  `${waName}`
-                )}"
-                           target="_blank"
-                           title="Pesan via WhatsApp">
-                          <i class="fab fa-whatsapp"></i>
-                        </a>
-                      </div>
-                  </div>
-                `;
-              }
-
-              const productItemHTML = `
-                <div class="col-12 col-md-6 col-lg-4 manage-color-hover wow slideInUp" data-wow-delay="${wowDelay.toFixed(
-                  1
-                )}s">
-                  <div class="product-item owl-theme product-listing-carousel owl-carousel">
-                    ${imageCarouselItemsHTML}
-                  </div>
-                  <div class="p-item-detail">
-                    <h4 class="text-center p-item-name">
-                      <a href="javascript:void(0);">${product.name}</a>
-                    </h4>
-                    <p class="text-center p-item-price">
-                      ${product.description || "Info & Pesan via WA"}
-                    </p>
-                  </div>
-                </div>
-              `;
-              productListContainer.insertAdjacentHTML(
-                "beforeend",
-                productItemHTML
-              );
-              wowDelay += 0.1;
-              if (wowDelay > 0.9) wowDelay = 0.2; // Reset delay agar tidak terlalu lama
-            });
-
-            // Setelah semua item produk ditambahkan ke DOM:
-            // 1. Inisialisasi ulang Owl Carousel untuk elemen yang baru ditambahkan
-            if (typeof $ !== "undefined" && $.fn.owlCarousel) {
-              $(".product-listing-carousel").each(function () {
-                // Hanya inisialisasi jika belum diinisialisasi
-                if (!$(this).hasClass("owl-loaded")) {
-                  $(this).owlCarousel({
-                    items: 1,
-                    loop: $(this).find(".item").length > 1, // Loop hanya jika ada lebih dari 1 gambar
-                    margin: 0,
-                    nav: false, // Biasanya false untuk slider gambar produk
-                    dots: $(this).find(".item").length > 1, // Tampilkan dots jika lebih dari 1 gambar
-                    autoplay: false,
-                    // Tambahkan opsi lain jika ada di script.js asli Anda
-                  });
-                }
+            if (applyFiltersButton) {
+              applyFiltersButton.addEventListener("click", function () {
+                applyAllFilters();
               });
             }
-
-            // 2. Inisialisasi ulang WOW.js untuk menganimasi elemen baru
-            if (typeof WOW !== "undefined") {
-              new WOW().init();
-            }
           })
           .catch((error) => {
             console.error("Gagal memuat atau memproses products.json:", error);
             productListContainer.innerHTML =
               '<p class="col-12 text-center text-danger">Gagal memuat produk. Silakan coba lagi nanti.</p>';
           });
-      });
+      }); // Akhir dari event listener DOMContentLoaded pertama
     </script>
   </body>
 </html>
