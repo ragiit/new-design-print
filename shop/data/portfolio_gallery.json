@@ -1,0 +1,320 @@
+[
+  {
+    "id": "item1",
+    "title": "Payung Promosi Cetak Logo",
+    "description": "Souvenir & Media Promosi Efektif",
+    "categories": ["promosi", "souvenir"],
+    "fancyboxGallery": "galleryPayung",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Contoh Payung Promosi",
+        "title": "Payung Promosi Full Print - New Design Print"
+      },
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Detail Payung Custom",
+        "title": "Detail Payung Promosi - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item2",
+    "title": "Kaos Komunitas Sablon DTF",
+    "description": "Apparel Custom Berkualitas",
+    "categories": ["apparel"],
+    "fancyboxGallery": "galleryKaos",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Contoh Kaos Komunitas",
+        "title": "Kaos Komunitas Sablon DTF - New Design Print"
+      },
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Desain Kaos Custom",
+        "title": "Desain Kaos Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item3",
+    "title": "Mug Keramik Cetak Custom",
+    "description": "Hadiah & Merchandise Unik",
+    "categories": ["souvenir"],
+    "fancyboxGallery": "galleryMug",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Contoh Mug Souvenir",
+        "title": "Mug Souvenir Cetak Full Color - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item4",
+    "title": "Totebag Custom Printing",
+    "description": "Tas Serbaguna untuk Promosi",
+    "categories": ["souvenir", "tas"],
+    "fancyboxGallery": "galleryTotebag",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Totebag Custom",
+        "title": "Totebag Custom Printing - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item5",
+    "title": "Sticker Label Produk",
+    "description": "Label Custom untuk Branding Produk",
+    "categories": ["sticker"],
+    "fancyboxGallery": "gallerySticker",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Sticker Label Produk",
+        "title": "Sticker Label Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item6",
+    "title": "Banner X-Banner Promosi",
+    "description": "Media Promosi Efektif Indoor",
+    "categories": ["promosi", "banner"],
+    "fancyboxGallery": "galleryBanner",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "X-Banner Promosi",
+        "title": "X-Banner Promosi Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item7",
+    "title": "Gantungan Kunci Akrilik",
+    "description": "Souvenir Unik & Custom",
+    "categories": ["souvenir"],
+    "fancyboxGallery": "galleryGantungan",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Gantungan Kunci Akrilik",
+        "title": "Gantungan Kunci Akrilik Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item8",
+    "title": "Notebook Custom Logo",
+    "description": "Media Promosi yang Berguna",
+    "categories": ["souvenir"],
+    "fancyboxGallery": "galleryNotebook",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Notebook Custom",
+        "title": "Notebook Custom Logo - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item9",
+    "title": "Tumbler Stainless Custom",
+    "description": "Botol Minum Promosi",
+    "categories": ["souvenir"],
+    "fancyboxGallery": "galleryTumbler",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Tumbler Promosi",
+        "title": "Tumbler Stainless Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item10",
+    "title": "Pin Custom Full Color",
+    "description": "Media Promosi & Identitas",
+    "categories": ["souvenir"],
+    "fancyboxGallery": "galleryPin",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Pin Custom",
+        "title": "Pin Promosi Full Color - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item11",
+    "title": "T-Shirt Event Organizer",
+    "description": "Kaos Seragam Acara",
+    "categories": ["apparel"],
+    "fancyboxGallery": "galleryTshirt",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "T-Shirt Event",
+        "title": "T-Shirt Event Organizer - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item12",
+    "title": "Kalender Meja Custom",
+    "description": "Media Promosi Tahunan",
+    "categories": ["promosi"],
+    "fancyboxGallery": "galleryKalender",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Kalender Meja",
+        "title": "Kalender Meja Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item13",
+    "title": "ID Card dan Lanyard",
+    "description": "Identitas Profesional & Promosi",
+    "categories": ["souvenir", "identitas"],
+    "fancyboxGallery": "galleryIDCard",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "ID Card Custom",
+        "title": "ID Card & Lanyard Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item14",
+    "title": "Map Custom Perusahaan",
+    "description": "Dokumentasi & Branding Profesional",
+    "categories": ["office"],
+    "fancyboxGallery": "galleryMap",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Map Custom",
+        "title": "Map Custom Perusahaan - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item15",
+    "title": "Kipas Promosi Cetak",
+    "description": "Souvenir Unik & Murah",
+    "categories": ["souvenir"],
+    "fancyboxGallery": "galleryKipas",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Kipas Promosi",
+        "title": "Kipas Promosi Cetak - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item16",
+    "title": "Tas Furing Custom",
+    "description": "Tas Serbaguna Ramah Lingkungan",
+    "categories": ["tas"],
+    "fancyboxGallery": "galleryTasFuring",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Tas Furing",
+        "title": "Tas Furing Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item17",
+    "title": "Jam Dinding Promosi",
+    "description": "Media Promosi Permanen",
+    "categories": ["souvenir", "promosi"],
+    "fancyboxGallery": "galleryJam",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Jam Dinding Promosi",
+        "title": "Jam Dinding Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item18",
+    "title": "Kartu Nama Desain Unik",
+    "description": "Identitas Profesional Custom",
+    "categories": ["identitas"],
+    "fancyboxGallery": "galleryKartuNama",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Kartu Nama Custom",
+        "title": "Kartu Nama Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item19",
+    "title": "Paper Bag Custom",
+    "description": "Kemasan Eksklusif dan Elegan",
+    "categories": ["packaging"],
+    "fancyboxGallery": "galleryPaperBag",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Paper Bag Custom",
+        "title": "Paper Bag Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item20",
+    "title": "Poster Promosi Full Color",
+    "description": "Media Visual Menarik",
+    "categories": ["promosi", "poster"],
+    "fancyboxGallery": "galleryPoster",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Poster Promosi",
+        "title": "Poster Promosi Full Color - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item21",
+    "title": "Kaos Distro Custom",
+    "description": "Fashion Streetwear Unik",
+    "categories": ["apparel"],
+    "fancyboxGallery": "galleryKaosDistro",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Kaos Distro",
+        "title": "Kaos Distro Custom - New Design Print"
+      }
+    ]
+  },
+  {
+    "id": "item22",
+    "title": "Sertifikat Cetak Eksklusif",
+    "description": "Piagam & Sertifikat Desain Profesional",
+    "categories": ["printing"],
+    "fancyboxGallery": "gallerySertifikat",
+    "images": [
+      {
+        "src": "shop/img/img_1.jpg",
+        "alt": "Sertifikat Cetak",
+        "title": "Sertifikat Cetak Eksklusif - New Design Print"
+      }
+    ]
+  }
+]
